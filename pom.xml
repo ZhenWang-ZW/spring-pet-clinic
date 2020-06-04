@@ -43,8 +43,8 @@
         </plugins>
     </build>
     <scm>
-        <developerConnection>scm:git:git@github.com:ZhenWang-ZW/spring-pet-clinic.git</developerConnection>
+        <connection>scm:git:https://github.com/ZhenWang-ZW/spring-pet-clinic.git</connection>
+        <developerConnection>scm:git:https://github.com/ZhenWang-ZW/spring-pet-clinic.git</developerConnection>
       <tag>zw-pet-clinic-0.0.1</tag>
   </scm>
-
 </project>
