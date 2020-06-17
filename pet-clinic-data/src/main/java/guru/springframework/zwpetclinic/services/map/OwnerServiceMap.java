@@ -3,12 +3,21 @@ package guru.springframework.zwpetclinic.services.map;
 import guru.springframework.zwpetclinic.model.Owner;
 import guru.springframework.zwpetclinic.services.CrudService;
 import guru.springframework.zwpetclinic.services.OwnerService;
+import guru.springframework.zwpetclinic.services.PetService;
+import guru.springframework.zwpetclinic.services.PetTypeService;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService{
+    private PetTypeService petTypeService;
+    private PetService petService;
+
+    public OwnerServiceMap(PetTypeService petTypeService, PetService petService) {
+        this.petTypeService = petTypeService;
+        this.petService = petService;
+    }
 
     @Override
     public Owner findById(Long id) {
@@ -17,7 +26,26 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
 
     @Override
     public Owner save(Owner object) {
-        return super.save(object);
+        if(object!=null){
+            if(!object.getPets().isEmpty()){
+                object.getPets().forEach(pet -> {
+                    if(pet.getType()!=null){
+                        if(pet.getType().getId()==null){
+                            pet.setType(petTypeService.save(pet.getType()));
+                        }
+//                        else{
+//                            throw new RuntimeException("Pet Type is required");
+//                        }
+                        if(pet.getId()==null){
+                            pet.setId(petService.save(pet).getId());
+                        }
+                    }
+                });
+            }
+            return super.save(object);
+        }else{
+            return null;
+        }
     }
 
     @Override
